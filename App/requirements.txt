@@ -2,7 +2,7 @@ flask
 flask_wtf
 wtforms
 cape.client
-bs4 import BeautifulSoup
+bs4
 json
 requests
 requests_cache
