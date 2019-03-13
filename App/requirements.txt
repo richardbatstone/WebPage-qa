@@ -1,7 +1,7 @@
 flask
 flask_wtf
 wtforms
-cape.client
+cape
 bs4
 json
 requests
