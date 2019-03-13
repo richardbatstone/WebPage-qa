@@ -3,4 +3,4 @@ WORKDIR /app
 ADD . /app
 RUN pip install -r requirements.txt
 EXPOSE 80
-CMD ["python", "questionAPI.py"
+CMD ["python", "questionAPI.py"]
