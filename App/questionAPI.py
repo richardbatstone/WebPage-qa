@@ -24,11 +24,6 @@ from cape.client import CapeClient
 from bs4 import BeautifulSoup
 import json
 import requests
-import requests_cache
-import pprint
-
-#requests_cache.install_cache('crime_api_cache', backend='sqlite', expire_after=36000)
-#pp = pprint.PrettyPrinter()
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
