@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<meta name="google-signin-client_id" content="260672493649-odso4hocepethk8u63r8rs4og0h7gunv.apps.googleusercontent.com">
     <h1>Ask a question!</h1>
     <form action="/questions" method="post" novalidate>
         {{ form.hidden_tag() }}
@@ -15,24 +14,4 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
-<div class="g-signin2" data-onsuccess="onSignIn">
-<script>
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
-}
-</script>
-</div>
-<a href="#" onclick="signOut();">Sign out</a>
-<script>
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  }
-</script>
 {% endblock %}
