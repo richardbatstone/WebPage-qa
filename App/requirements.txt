@@ -1,0 +1,9 @@
+flask
+flask_wtf
+wtforms
+cape.client
+bs4 import BeautifulSoup
+json
+requests
+requests_cache
+pprint

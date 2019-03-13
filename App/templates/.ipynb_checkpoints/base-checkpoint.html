@@ -1,0 +1,15 @@
+<html>
+    <head>
+      {% if title %}
+      <title>{{ title }} - WebPage QA</title>
+      {% else %}
+      <title>Welcome to Microblog</title>
+      {% endif %}
+    </head>
+    <body>
+        <script src="https://apis.google.com/js/platform.js" async defer></script>
+        <div>WebPage QA: <a href="/">Home</a> <a href="/documents">Documents</a> <a href="/answers">Answers</a></div>
+        <hr>
+        {% block content %}{% endblock %}
+    </body>
+</html>

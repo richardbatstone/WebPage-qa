@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Here are your current answers!</h1>
+
+        {% for ans in answers %}
+<div><p><b>Question:</b> {{ ans['question'] }} </p>
+    <p><b>Answer:</b> {{ ans['answer'] }}</p>
+    <p><b>Context:</b> {{ ans['context'] }}</p>
+</div>
+        {% endfor %}
+
+{% endblock %}
