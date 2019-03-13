@@ -133,11 +133,4 @@ def get_answers():
                            answers=answer_list), 201
 
 if __name__=="__main__":
-    app.run(host = '0.0.0.0', port=80, debug=True)
-
-# To think about:
-# user authentication, admin config etc.
-# Segregating users within cape (search only over user documents)
-# Storing user documents and questions/answers in a database
-
-#
+    app.run(host = '0.0.0.0', port=80, debug=False)
