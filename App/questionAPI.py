@@ -23,6 +23,8 @@ from wtforms.validators import DataRequired
 from cape.client import CapeClient
 from bs4 import BeautifulSoup
 import json
+import httplib
+import os
 import requests
 
 app = Flask(__name__, instance_relative_config=True)
@@ -34,7 +36,11 @@ API_BASE = app.config['API_BASE']
 ADMIN_TOKEN = app.config['ADMIN_TOKEN']
 
 cc = CapeClient(api_base=API_BASE, admin_token=ADMIN_TOKEN)
-mercury_server = "http://35.185.107.160:8080/"
+def mercury_backend():
+    host = os.getenv(“BACKEND_SRV_SERVICE_HOST”)
+    port = os.getenv(“BACKEND_SRV_SERVICE_PORT”)
+    backend_connect = httplib.HTTPConnection(host, port)
+    return backend_connect
 
 USER_TOKEN = 'token'
 
@@ -48,6 +54,7 @@ class QuestionForm(FlaskForm):
     submit = SubmitField('Submit')
 
 def get_parsed_text(url): # Mercury parse of specified url
+    mercury_server = mercury_backend()
     resp = requests.post(mercury_server, data={'url': url})
     j_response = resp.json()
     content = j_response['content']
