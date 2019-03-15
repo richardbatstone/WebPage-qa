@@ -23,7 +23,6 @@ from wtforms.validators import DataRequired
 from cape.client import CapeClient
 from bs4 import BeautifulSoup
 import json
-import httplib
 import os
 import requests
 
