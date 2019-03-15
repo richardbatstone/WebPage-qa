@@ -8,5 +8,5 @@ def landing():
     env_vars = list(os.environ)
     return jsonify(env_vars)
 
-if __name__=="__main__":
-    app.run(port=8080, debug=False)
+def run(port):
+    app.run(port=port, debug=False)

@@ -45,7 +45,9 @@ kubectl get service webpage-qa --watch (untill you get an external IP)
 
 Then use that IP
 
+Look at this: https://testdriven.io/blog/developing-a-single-page-app-with-flask-and-vuejs/
 
+Try: using os and httplib again, but make sure calling MERCURY-PARSER-SERVICE-HOST / PORT
 
 
 

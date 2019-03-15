@@ -35,7 +35,10 @@ API_BASE = app.config['API_BASE']
 ADMIN_TOKEN = app.config['ADMIN_TOKEN']
 
 cc = CapeClient(api_base=API_BASE, admin_token=ADMIN_TOKEN)
-mercury_server = "http://10.3.242.146:80/"
+
+host = os.getenv('MERCURY_PARSER_SERVICE_HOST')
+port = os.getenv('MERCURY_PARSER_SERVICE_PORT')
+mercury_server = str(host) + ":" + str(port)
 
 USER_TOKEN = 'token'
 
