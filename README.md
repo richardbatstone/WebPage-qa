@@ -49,6 +49,6 @@ Look at this: https://testdriven.io/blog/developing-a-single-page-app-with-flask
 
 Try: using os and httplib again, but make sure calling MERCURY-PARSER-SERVICE-HOST / PORT
 
-
+Try and pass environment variables to image run? Where do they go though? In the deployment Yaml?
 
 
