@@ -43,6 +43,11 @@ documents = {}
 answers = {}
 urls = []
 
+class QuestionForm(FlaskForm):
+    url = StringField('Webpage url:')
+    question = StringField('Question:', validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
 def get_parsed_text(url): # Mercury parse of specified url
     resp = requests.post(mercury_server, data={'url': url})
     j_response = resp.json()
