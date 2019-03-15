@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: webpage-qa
-        image: "gcr.io/qmul-lab/webpage-qa:v3.2"
+        image: "gcr.io/qmul-lab/webpage-qa:v3.3"
         env:
         - name: ADMIN_TOKEN
         value: '9Zoh37DJ5VxfjUWIKdNVFQdTeIMkgz4j13Odd8eHclw'
