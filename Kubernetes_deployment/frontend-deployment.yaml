@@ -7,14 +7,12 @@ spec:
     matchLabels:
       app: webpage-qa
       tier: frontend
-      track: stable
   replicas: 1
   template:
     metadata:
       labels:
         app: webpage-qa
         tier: frontend
-        track: stable
     spec:
       containers:
       - name: webpage-qa
