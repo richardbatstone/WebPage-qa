@@ -19,10 +19,10 @@ gcloud container clusters create webpage-qa --num-nodes=3 --machine-type "n1-sta
 # Deploy marcury parser "backend"
 kubectl create -f mercury-parser-deployment.yaml
 
-kubectl get deployment mercury-parser // see the deployment
-kubectl get pods // see pods
-kubectl get pods --all-namespaces // see all pods
-gcloud compute instances list // see instances and ip addresses
+kubectl get deployment mercury-parser  see the deployment
+kubectl get pods  see pods
+kubectl get pods --all-namespaces  see all pods
+gcloud compute instances list  see instances and ip addresses
 
 can check things are working by:
 kubectl exec -it [pod_name] bash
@@ -35,4 +35,18 @@ kubectl create -f mercury-parser-service.yaml // create the service
 kubectl describe svc mercury-parser // to get the service ip and port.
 you can then exec -it backinto any node and curl the service ip and port.
 
-Set webpage-qa parameters (cape api base, admin and mercury-server address)
+Set webpage-qa parameters (cape api base, admin and mercury-server address) (find a way to automate this)
+
+kubectl create -f frontend-deployment.yaml  (frontend deployemnt)
+kubectl describe deployment webpage-qa (check its working)
+kubectl create -f frontend-service.yaml  (frontend service)
+kubectl describe svc webpage-qa (check its working)
+kubectl get service webpage-qa --watch (untill you get an external IP)
+
+Then use that IP
+
+
+
+
+
+
