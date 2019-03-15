@@ -1,4 +1,4 @@
 DEBUG = True
-ADMIN_TOKEN = '7DfRMDfnbKrTqeAWWLoTeXELn7eSimUhZJDP7QC-t20'
-API_BASE = 'http://9efea69b.ngrok.io/api' # Should be http://xxxxxx.ngrok.io/api
+ADMIN_TOKEN = '9Zoh37DJ5VxfjUWIKdNVFQdTeIMkgz4j13Odd8eHclw'
+API_BASE = 'https://37549f79.ngrok.io/api' # Should be http://xxxxxx.ngrok.io/api
 SECRET_KEY = 'you-will-never-guess' # I can't remember why this is needed
