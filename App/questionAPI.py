@@ -31,8 +31,8 @@ app.config.from_object('config')
 app.config.from_pyfile('config.py')
 
 SECRET_KEY = app.config['SECRET_KEY']
-API_BASE = app.config['API_BASE']
-ADMIN_TOKEN = app.config['ADMIN_TOKEN']
+API_BASE = str(os.getenv('API_BASE'))
+ADMIN_TOKEN = str(os.getenv('ADMIN_TOKEN'))
 
 cc = CapeClient(api_base=API_BASE, admin_token=ADMIN_TOKEN)
 
