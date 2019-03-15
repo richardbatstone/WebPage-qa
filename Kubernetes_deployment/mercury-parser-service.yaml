@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: webpage-qa
+  name: mercury-parser
 spec:
   selector:
     app: mercury-parser
