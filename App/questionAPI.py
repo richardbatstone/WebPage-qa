@@ -38,7 +38,7 @@ cc = CapeClient(api_base=API_BASE, admin_token=ADMIN_TOKEN)
 
 host = str(os.getenv('MERCURY_PARSER_SERVICE_HOST'))
 port = str(os.getenv('MERCURY_PARSER_SERVICE_PORT'))
-server = "http://{}:{}/".format(host, port)
+mercury_server = "http://{}:{}/".format(host, port)
 
 USER_TOKEN = 'token'
 
