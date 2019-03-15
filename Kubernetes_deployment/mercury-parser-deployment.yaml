@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: webpage-qa
+  name: mercury-parser
 spec:
   selector:
     matchLabels:
       app: mercury-parser
       tier: backend
       track: stable
-  replicas: 7
+  replicas: 3
   template:
     metadata:
       labels:
@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: mercury-parser
-          image: "gcr.io/qmul-lab/mercury-server:v1:1.0"
+          image: "gcr.io/qmul-lab/mercury-server:v1"
           ports:
             - name: http
               containerPort: 8080
