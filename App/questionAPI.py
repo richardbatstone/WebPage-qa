@@ -36,19 +36,13 @@ API_BASE = app.config['API_BASE']
 ADMIN_TOKEN = app.config['ADMIN_TOKEN']
 
 cc = CapeClient(api_base=API_BASE, admin_token=ADMIN_TOKEN)
-def mercury_backend():
-    host = os.getenv(“BACKEND_SRV_SERVICE_HOST”)
-    port = os.getenv(“BACKEND_SRV_SERVICE_PORT”)
-    backend_connect = httplib.HTTPConnection(host, port)
-    return backend_connect
+mercury_server = "http://10.3.240.108:80/"
 
 USER_TOKEN = 'token'
 
 documents = {}
 answers = {}
 urls = []
-
-mercury_server = "http://10.3.240.108:80/"
 
 def get_parsed_text(url): # Mercury parse of specified url
     resp = requests.post(mercury_server, data={'url': url})
