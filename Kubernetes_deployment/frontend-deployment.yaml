@@ -16,5 +16,5 @@ spec:
     spec:
       containers:
       - name: webpage-qa
-        image: "gcr.io/qmul-lab/webpage-qa:v3"
+        image: "gcr.io/qmul-lab/webpage-qa:v3.1"
         
