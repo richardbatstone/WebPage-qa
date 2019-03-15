@@ -35,7 +35,7 @@ API_BASE = app.config['API_BASE']
 ADMIN_TOKEN = app.config['ADMIN_TOKEN']
 
 cc = CapeClient(api_base=API_BASE, admin_token=ADMIN_TOKEN)
-mercury_server = "http://10.3.240.108:80/"
+mercury_server = "http://10.3.242.146:80/"
 
 USER_TOKEN = 'token'
 
