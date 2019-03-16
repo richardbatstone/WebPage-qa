@@ -51,4 +51,4 @@ Try: using os and httplib again, but make sure calling MERCURY-PARSER-SERVICE-HO
 
 Try and pass environment variables to image run? Where do they go though? In the deployment Yaml?
 
-
+Note, ngrok times out after a bit so can't just leave up.
