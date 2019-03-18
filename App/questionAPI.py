@@ -41,7 +41,7 @@ m_host = str(os.getenv('MERCURY_PARSER_SERVICE_HOST'))
 m_port = str(os.getenv('MERCURY_PARSER_SERVICE_PORT'))
 mercury_server = "http://{}:{}/".format(m_host, m_port)
 
-cassandra_server = '10.7.247.53'
+cassandra_server = str(os.getenv('CASSANDRA_TOKEN'))
 
 #str(os.getenv('CASSANDRA_SERVICE_HOST'))
 
