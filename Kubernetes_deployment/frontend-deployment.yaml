@@ -16,11 +16,9 @@ spec:
     spec:
       containers:
       - name: webpage-qa
-        image: "gcr.io/qmul-lab/webpage-qa:v3.8"
+        image: "gcr.io/qmul-lab/webpage-qa:v3.9"
         env:
         - name: ADMIN_TOKEN
           value: "RRukyufCR36dH7q5LeSCUe8KbWsqB7DoPpXaYfGS0bw"
         - name: API_BASE
           value: "http://1b7129dd.ngrok.io/api"
-        - name: CASSANDRA_TOKEN
-          value: "35.240.124.233"
