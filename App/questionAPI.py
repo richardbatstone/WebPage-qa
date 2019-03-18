@@ -49,15 +49,17 @@ USER_TOKEN = 'token'
 
 def cassandra_connect(cassandra_server):
     cluster = Cluster([cassandra_server])
+    session = cluster.connect()
     try:
-        session = cluster.connect('webpage')
-    except NoHostAvailable:
-        session = cluster.connect()
         session.execute("CREATE KEYSPACE webpage WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 2}")
         session.execute("CREATE TABLE webpage.documents (CapeID text PRIMARY KEY, URL text, Title text, Contents text)")
         session.execute("CREATE TABLE webpage.answers (ID text PRIMARY KEY, Question text, Answer text, Context text)")
-        session = cluster.connect('webpage')
+    except:
+        pass
+    session = cluster.connect('webpage')
     return session
+
+session = cassandra_connect(cassandra_server)
 
 class QuestionForm(FlaskForm):
     url = StringField('Webpage url:')
@@ -161,5 +163,4 @@ def get_answers():
                            answers=answer_list), 201
 
 if __name__=="__main__":
-    session = cassandra_connect(cassandra_server)
     app.run(host = '0.0.0.0', port=80, debug=False)
