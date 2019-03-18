@@ -3,6 +3,7 @@ flask
 flask_wtf
 wtforms
 lxml
+cassandra-driver
 
 #Cape External dependencies
 Authomatic==0.1.0.post1

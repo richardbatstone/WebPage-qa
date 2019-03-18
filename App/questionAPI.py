@@ -22,6 +22,7 @@ from wtforms import StringField, PasswordField, BooleanField, SubmitField
 from wtforms.validators import DataRequired
 from cape.client import CapeClient
 from bs4 import BeautifulSoup
+from cassandra.cluster import Cluster, NoHostAvailable
 import json
 import os
 import requests
@@ -36,15 +37,27 @@ ADMIN_TOKEN = str(os.getenv('ADMIN_TOKEN'))
 
 cc = CapeClient(api_base=API_BASE, admin_token=ADMIN_TOKEN)
 
-host = str(os.getenv('MERCURY_PARSER_SERVICE_HOST'))
-port = str(os.getenv('MERCURY_PARSER_SERVICE_PORT'))
-mercury_server = "http://{}:{}/".format(host, port)
+m_host = str(os.getenv('MERCURY_PARSER_SERVICE_HOST'))
+m_port = str(os.getenv('MERCURY_PARSER_SERVICE_PORT'))
+mercury_server = "http://{}:{}/".format(m_host, m_port)
+
+c_host = str(os.getenv('CASSANDRA_SERVICE_HOST'))
+c_port = str(os.getenv('CASSANDRA_SERVICE_PORT'))
+cassandra_server = "http://{}:{}/".format(c_host, c_port)
 
 USER_TOKEN = 'token'
 
-documents = {}
-answers = {}
-urls = []
+def cassandra_connect(cassandra_server):
+    cluster = Cluster([cassandra_server])
+    try:
+        session = cluster.connect('webpage')
+    except NoHostAvailable:
+        session = cluster.connect()
+        session.execute("CREATE KEYSPACE webpage WITH REPLICATION = {'class': 'SimpleStrategy', 'replication_factor': 2}")
+        session.execute("CREATE TABLE webpage.documents (CapeID text PRIMARY KEY, URL text, Title text, Contents text)")
+        session.execute("CREATE TABLE webpage.answers (ID text PRIMARY KEY, Question text, Answer text, Context text)")
+        session = cluster.connect('webpage')
+    return session
 
 class QuestionForm(FlaskForm):
     url = StringField('Webpage url:')
@@ -63,26 +76,27 @@ def get_parsed_text(url): # Mercury parse of specified url
     all_text = "\n".join(text_out)
     return all_text, title
 
-def upload_document(url, documents): # Upload parsed webpage to cape
-    i = len(documents)
-    new_document_name = "document_" + str(i)
+def upload_document(url, session): # Upload parsed webpage to cape
+    num_docs = session.execute("SELECT COUNT (*) from documents") # querey documents table to get number (things that's just count)
+    i = num_docs.one().count
     parsed_text, parsed_title = get_parsed_text(url)
     new_document_id = cc.add_document(title=parsed_title, text=parsed_text, replace=True) # If the front end is
     # re-loaded and the url list cleared, then whilst docs might persist in cape, we have not record of them. Set
     # replace = True to avoid error on trying to write new documents that have been persisted in cape.
-    documents[new_document_name] = {'ID':new_document_id, 'title':parsed_title, 'content':parsed_text}
-    urls.append(url)
+    session.execute("INSERT INTO documents (CapeID, URL, title, contents) VALUES (%s, %s, %s, %s)",
+                    (new_document_id, url, parsed_title, parsed_text))
     
-def get_cape_answer(question, documents, answers): # Get answer from cape
-    num_answers = len(answers)
+def get_cape_answer(question, session): # Get answer from cape
+    num_answers = session.execute("SELECT COUNT (*) from answers").one().count # count answers in answers table
     new_answer_id = "answer_" + str(num_answers)
     IDs = []
-    for i in documents.keys():
-        IDs.append(documents[i]['ID'])
+    for row in session.execute('SELECT CapeID FROM documents'):
+        IDs.append(row.capeid) # get the IDs from the documents table
     answer = cc.answer(question,
                        user_token=USER_TOKEN,
                        document_ids=IDs) # Search over all documents
-    answers[new_answer_id] = {'question': question, 'answer': answer[0]['answerText'], 'context': answer[0]['answerContext']}
+    session.execute("INSERT INTO answers (ID, Question, Answer, Context) VALUES (%s, %s, %s, %s)",
+                    (new_answer_id, question, answer[0]['answerText'], answer[0]['answerContext']))
     return answer
 
 @app.route('/') # Question page
@@ -95,20 +109,23 @@ def ask_a_question():
     form = QuestionForm()
     if form.validate_on_submit(): # Check to see if a question has been asked
         if form.url.data != "": # If a url is specified, check repeat and then parse
+            urls = []
+            for row in session.execute('SELECT URL from documents'):
+                urls.append(row.url)
             if form.url.data not in urls:
-                upload_document(form.url.data, documents)
-            answer = get_cape_answer(form.question.data, documents, answers)
+                upload_document(form.url.data, session)
+            answer = get_cape_answer(form.question.data, session)
             return render_template('question_response.html',
                                    title='Answer!',
-                                   question=form.question.data, 
+                                   question=form.question.data,
                                    answer=answer[0]['answerText'],
                                    context=answer[0]['answerContext']), 201
         if form.url.data == "": # If no url specified, search current documents (if there are any)
-            if len(documents) == 0:
+            if session.execute("SELECT COUNT (*) from documents").one().count == 0:
                 error = "You have no current documents. Specify a webpage to start."
                 return render_template('error.html', title='Error!', error=error), 400
             else:
-                answer = get_cape_answer(form.question.data, documents, answers)
+                answer = get_cape_answer(form.question.data, session)
                 return render_template('question_response.html',
                                        title='Answer!',
                                        question=form.question.data, 
@@ -121,8 +138,11 @@ def ask_a_question():
 @app.route('/documents', methods=['GET'])
 def get_documents():
     document_list = []
-    for doc in documents.keys():
-        document_list.append(documents[doc])
+    for row in session.execute('SELECT * from documents'):
+        entry = {}
+        entry['title'] = row.title
+        entry['content'] = row.contents
+        document_list.append(entry) # querey documents table and get a list of contents
     return render_template('document_list.html',
                            title="Documents!",
                            documents=document_list), 201
@@ -130,11 +150,16 @@ def get_documents():
 @app.route('/answers', methods=['GET'])
 def get_answers():
     answer_list = []
-    for ans in answers.keys():
-        answer_list.append(answers[ans])
+    for row in session.execute('SELECT * from answers'):
+        entry = {}
+        entry['question'] = row.question
+        entry['answer'] = row.answer
+        entry['context'] = row.context
+        answer_list.append(entry) # query answer table and get a list of answers
     return render_template('answer_list.html',
                            title="Answers!",
                            answers=answer_list), 201
 
 if __name__=="__main__":
+    session = cassandra_connect(cassandra_server)
     app.run(host = '0.0.0.0', port=80, debug=False)
