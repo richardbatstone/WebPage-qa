@@ -15,7 +15,7 @@ The main webapp is defined in App/questionAPI.py. The app's methods are, broadly
 
 The app is designed for cloud deployment using Kubernetes. The app's structure is outlined in the diagram below.
 
-[image]
+![alt text](https://github.com/richardbatstone/webpage-qa/blob/master/deployment_graphic.png "Deployment structure")
 
 ### questionAPI
 
