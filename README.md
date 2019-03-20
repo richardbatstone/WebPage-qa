@@ -41,13 +41,11 @@ The CapeAPI does not currently form part of the Kubernetes deployment (see furth
  
  # Pass a test question
  
- curl 'http://localhost:5050/api/0.1/answer?token=demo&question=Who+heads+the+board?&\...
- text= The+board+is+represented+by+the+chairman'
+ curl 'http://localhost:5050/api/0.1/answer?token=demo&question=Who+heads+the+board?&text=The+board+is+represented+by+the+chairman'
  
  # Set up a user (replace password and token with a user password and token)
  
- curl -v "http://localhost:5050/api/0.1/user/create-user?userId=user_1&\...
- password=password&token=token&superAdminToken=REPLACEME"
+ curl -v "http://localhost:5050/api/0.1/user/create-user?userId=user_1&\password=password&token=token&superAdminToken=REPLACEME"
  
  # Log the user in and return the admin token
  
