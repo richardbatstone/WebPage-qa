@@ -9,7 +9,7 @@ import json
 import os
 import requests
 
-# Get cluser and deployment variables
+# Get cluster and deployment variables
 
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
