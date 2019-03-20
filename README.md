@@ -27,7 +27,7 @@ Mercury-parser is a micro-service which parses web pages and extracts their cont
 
 ### database
 
-The project includes a Cassandra database which stores: (i) documents (i.e. web pages) which are queried; and (ii) questions which are submitted and their associated answers. The database is deployed using a public Cassandra images. Like the mercury-parser, the deployment is accessed with a "selector" service. The webapp reads and writes to the database using Cassandra Driver (https://datastax.github.io/python-driver/index.html), a Python client driver for Cassandra. By default, 1 replica set is created.
+The project includes a Cassandra database which stores: (i) documents (i.e. web pages) which are queried; and (ii) questions which are submitted and their associated answers. The database is deployed (as a replication controller) using a public Cassandra image. Like the mercury-parser, the deployment is accessed with a "selector" service. The webapp reads and writes to the database using Cassandra Driver (https://datastax.github.io/python-driver/index.html), a Python client driver for Cassandra. By default, 1 replica set is created.
 
 ### CapeAPI
 
@@ -75,6 +75,16 @@ The CapeAPI does not currently form part of the Kubernetes deployment (see furth
  # Wait for public IP address
  
  kubectl get service webpage-qa --watch
+ 
+ # The deployments can then be scaled in the usual way
+ 
+ kubectl scale deployment webpage-qa --replicas=3
+ kubectl scale deployment mercury-parser --replicas=3
+ kubectl scale rc cassandra --replicas=3
+ 
+ # Check the Cassandra ring has been formed
+ 
+ kubectl exec -it cassandra-lwfvw -- nodetool status
  ```
  
  ## Further work
