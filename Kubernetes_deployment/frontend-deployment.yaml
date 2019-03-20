@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
       - name: webpage-qa
-        image: "gcr.io/qmul-lab/webpage-qa:v3.9"
+        image: "gcr.io/qmul-lab/webpage-qa:v2"
         env:
         - name: ADMIN_TOKEN
-          value: "NQxBmDWXHIJsV6KFa81UlLAW0tGwVfDQnESiYP_UAmU"
+          value: "b7Iv1REtJo3V86vm1Qed_Q5MIW04MZcP7AdAGlHzZuY"
         - name: API_BASE
-          value: "http://0e85c62d.ngrok.io/api"
+          value: "https://66b0409f.ngrok.io/api"
