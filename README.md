@@ -52,6 +52,30 @@ The CapeAPI does not currently form part of the Kubernetes deployment (see furth
  curl -v "http://localhost:5050/api/0.1/user/login?login=user_1&password=password"
  
  ```
+ ### Setup
+ 
+ The Kubernetes configuration files are included in Kubernetes_deployment/. The webapp can be deployed on Google Cloud Platform, for example, by:
+ 
+ ```bash
+ # Set up a cluster
+ 
+ gcloud config set compute/zone europe-west1-b
+ gcloud container clusters create webpage-qa --num-nodes=3 --machine-type "n1-standard-2"
+ 
+ # Kubernetes deployment
+ 
+ kubectl create -f cassandra-peer-service.yaml
+ kubectl create -f cassandra-service.yaml
+ kubectl create -f cassandra-replication-controller.yaml
+ kubectl create -f mercury-parser-deployment.yaml
+ kubectl create -f mercury-parser-service.yaml
+ kubectl create -f frontend-deployment.yaml
+ kubectl create -f frontend-service.yaml
+ 
+ # Wait for public IP address
+ 
+ kubectl get service webpage-qa --watch
+ ```
  
  ## Further work
 
