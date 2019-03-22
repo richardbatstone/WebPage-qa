@@ -1,6 +1,6 @@
 # webpage-qa
 
-This is a project to apply BloomburyAI's "Cape" (https://github.com/bloomsburyai/cape-webservices) model to web pages. Cape is a question-answer model that allows users to upload documents and ask natural language questions of those documents. This project describes a webapp which allows users to provide web page urls and ask questions of the web page's content.
+This is a project to apply BloomburyAI's "Cape" (https://github.com/bloomsburyai/cape-webservices) model to web pages. Cape is a question-answer model that allows users to upload documents and ask natural language questions of those documents. This project describes a webapp and associated API which allows users to provide web page urls and ask questions of the web page's content.
 
 ## Overview
 
