@@ -11,8 +11,8 @@ Route | Type | Description
 /questionsAPI | POST | The main entry point. It accepts POST requests containing a url and question, returns the answer and the answer "context" (the extracted text from the web page which the model has determined contains the answer).
 /questionsAPI/documentsAPI | GET | Returns the IDs, titles and contents of the web pages that have been submitted.
 /questionsAPI/documentsAPI/{ID} | GET | Returns the title and contents of the web pages with the given ID.
-/questionsAPI/answersAPI" | GET | Returns the questions that have been submitted, together with their IDs, associated answers and answer contexts.
-/questionsAPI/answersAPI/{ID}" | GET | Returns the question with the given ID, together with its associated answer and answer context.
+/questionsAPI/answersAPI | GET | Returns the questions that have been submitted, together with their IDs, associated answers and answer contexts.
+/questionsAPI/answersAPI/{ID} | GET | Returns the question with the given ID, together with its associated answer and answer context.
  
 ## Deployment
 
