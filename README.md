@@ -6,11 +6,12 @@ This is a project to apply BloomburyAI's "Cape" (https://github.com/bloomsburyai
 
 The main webapp is defined in App/questionAPI.py. It is designed to be accessed through a browser. The app also exposes an API with the following methods:
 
-  - "/questionsAPI", the main entry point. It accepts POST requests containing a url and question, returns the answer and the answer "context" (the extracted text from the web page which the model has determined contains the answer);
- - "/questionsAPI/documentsAPI", accepts GET requests, returns the IDs, titles and contents of the web pages that have been submitted;
- - "/questionsAPI/documentsAPI/{ID}", accepts GET requests, returns the title and contents of the web pages with the given ID;
- - "/questionsAPI/answersAPI", accepts GET requests, returns the questions that have been submitted, together with their IDs, associated answers and answer contexts; and
- - "/questionsAPI/answersAPI/{ID}", accepts GET requests, returns the question with the given ID, together with its associated answer and answer context.
+Route | Type | Description
+/questionsAPI | POST | The main entry point. It accepts POST requests containing a url and question, returns the answer and the answer "context" (the extracted text from the web page which the model has determined contains the answer).
+/questionsAPI/documentsAPI | GET | Returns the IDs, titles and contents of the web pages that have been submitted.
+/questionsAPI/documentsAPI/{ID} | GET | Returns the title and contents of the web pages with the given ID.
+/questionsAPI/answersAPI" | GET | Returns the questions that have been submitted, together with their IDs, associated answers and answer contexts.
+/questionsAPI/answersAPI/{ID}" | GET | Returns the question with the given ID, together with its associated answer and answer context.
  
 ## Deployment
 
