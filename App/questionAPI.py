@@ -96,6 +96,10 @@ def get_cape_answer(question, session):
                     (new_answer_id, question, answer[0]['answerText'], answer[0]['answerContext']))
     return answer
 
+############################################
+# Webapp routes
+############################################
+
 # Webapp landing page, a flask form where users can submit a url and question. 
 # On submit, the form makes a POST request to /questions
 
@@ -169,6 +173,87 @@ def get_answers():
     return render_template('answer_list.html',
                            title="Answers!",
                            answers=answer_list), 200
+
+############################################
+# API routes
+############################################
+
+@app.route('/questionsAPI', methods=['GET', 'POST'])
+def ask_a_question_API():
+    if not request.json or 'question' not in request.json:
+        return jsonify({'error': "You must ask a question."}), 400
+    elif 'url' not in request.json or request.json["url"] == "":
+        question = request.json["question"]
+        if session.execute("SELECT COUNT (*) from documents").one().count == 0:
+            return jsonify({'error': "You must specify a document."}), 400
+        else:
+            answer = get_cape_answer(question, session)
+            return jsonify({'question': '{}'.format(question),
+                            'answer': '{}'.format(answer[0]['answerText'], ),
+                            'context': '{}'.format(answer[0]['answerContext'])}), 201
+    else:
+        url = request.json["url"]
+        question = request.json["question"]
+        urls = []
+        for row in session.execute('SELECT URL from documents'):
+            urls.append(row.url)
+        if url not in urls:
+            upload_document(url, session)
+        answer = get_cape_answer(question, session)
+        return jsonify({'question': '{}'.format(question),
+                        'answer': '{}'.format(answer[0]['answerText'],),
+                        'context': '{}'.format(answer[0]['answerContext'])}), 201
+
+
+@app.route('/answersAPI', methods=['GET'])
+def get_answers_API():
+    answer_list = []
+    for row in session.execute('SELECT * FROM answers'):
+        entry = {}
+        entry['ID'] = row.id
+        entry['question'] = row.question
+        entry['answer'] = row.answer
+        entry['context'] = row.context
+        answer_list.append(entry) # query answer table and get a list of answers
+    return jsonify(answer_list), 200
+
+@app.route('/answersAPI/<ID>', methods=['GET'])
+def get_answers_by_ID_API(ID):
+    answer = {}
+    query = "SELECT * FROM answers WHERE id='{}'".format(ID)
+    try:
+        entry = session.execute(query).one()
+        answer['ID'] = entry.id
+        answer['question'] = entry.question
+        answer['answer'] = entry.answer
+        answer['context'] = entry.context
+        return jsonify(answer), 200
+    except:
+        return jsonify({'error': "Answer ID not found"}), 400
+
+@app.route('/documentsAPI', methods=['GET'])
+def get_documents_API():
+    document_list = []
+    for row in session.execute('SELECT * FROM documents'):
+        entry = {}
+        entry['ID'] = row.capeid
+        entry['title'] = row.title
+        entry['contents'] = row.contents
+        document_list.append(entry) # query answer table and get a list of answers
+    return jsonify(document_list), 200
+
+@app.route('/documentsAPI/<ID>', methods=['GET'])
+def get_documents_by_ID_API(ID):
+    document = {}
+    query = "SELECT * FROM documents WHERE capeid='{}'".format(ID)
+    try:
+        entry = session.execute(query).one()
+        document['ID'] = entry.capeid
+        document['question'] = entry.title
+        document['answer'] = entry.contents
+        return jsonify(document), 200
+    except:
+        return jsonify({'error': "Document ID not found"}), 400
 
 if __name__=="__main__":
     app.run(host = '0.0.0.0', port=80, debug=False)
