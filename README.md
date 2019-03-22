@@ -4,12 +4,13 @@ This is a project to apply BloomburyAI's "Cape" (https://github.com/bloomsburyai
 
 ## Overview
 
-The main webapp is defined in App/questionAPI.py. It is designed to be accessed through a browser. The app's methods are, broadly:
+The main webapp is defined in App/questionAPI.py. It is designed to be accessed through a browser. The app also exposes an API with the following methods:
 
- - "/", entry page providing a web form for submitting requests to "/questions";
- - "/question", accepts POST requests containing a url and question, returns the answer and the answer "context" (the extracted text from the web page which the model has determined contains the answer);
- - "/documents", accepts GET requests, returns the titles and contents of the web pages that have been submitted; and
- - "/answers", accepts GET requests, returns the questions, answers and answer contexts that have been submitted.
+  - "/questionsAPI", the main entry point. It accepts POST requests containing a url and question, returns the answer and the answer "context" (the extracted text from the web page which the model has determined contains the answer);
+ - "/questionsAPI/documentsAPI", accepts GET requests, returns the IDs, titles and contents of the web pages that have been submitted;
+ - "/questionsAPI/documentsAPI/{ID}", accepts GET requests, returns the title and contents of the web pages with the given ID;
+ - "/questionsAPI/answersAPI", accepts GET requests, returns the questions that have been submitted, together with their IDs, associated answers and answer contexts; and
+ - "/questionsAPI/answersAPI/{ID}", accepts GET requests, returns the question with the given ID, together with its associated answer and answer context.
  
 ## Deployment
 
@@ -17,19 +18,19 @@ The webapp is designed for cloud deployment using Kubernetes. The app's structur
 
 ![alt text](https://github.com/richardbatstone/webpage-qa/blob/master/deployment_graphic.png "Deployment structure")
 
-### questionAPI
+#### questionAPI
 
 questionAPI is a Python Flask webapp and the project's entry point. It is designed to be accessed through a brower and populates the small number of templates in App/templates/. The app is served with Flask's built-in server (rather than a production server, see further work below). For deployment, the app is containerised and exposed on a public IP address at port 80 with a "LoadBalancer" service. By default, 1 replica set is created.
 
-### mercury-parser
+#### mercury-parser
 
 Mercury-parser is a micro-service which parses web pages and extracts their content. It is based on Postlight's Mercury-parser (https://github.com/postlight/mercury-parser), which is a node package, and exposed in a simple node express server. It was developed for this project and separately described here: https://github.com/richardbatstone/mercury_server. For deployment, the server is containerised and accessed with a "selector" service (Kubernetes_deployment/mercury-parser-service.yaml). The host and port clusterIP of the service are accessible in the other pods in the cluster as environment variables. By default, 1 replica set is created.
 
-### database
+#### database
 
 The project includes a Cassandra database which stores: (i) documents (i.e. web pages) which are queried; and (ii) questions which are submitted and their associated answers. The database is deployed (as a replication controller) using a public Cassandra image. Like the mercury-parser, the deployment is accessed with a "selector" service. The webapp reads and writes to the database using Cassandra Driver (https://datastax.github.io/python-driver/index.html), a Python client driver for Cassandra. By default, 1 replica set is created.
 
-### CapeAPI
+#### CapeAPI
 
 The CapeAPI does not currently form part of the Kubernetes deployment (see further work below). Instead, Cape must be launched separately and accessed as an external resource. The steps to deploy Cape and access it from the project are:
 
@@ -52,7 +53,7 @@ The CapeAPI does not currently form part of the Kubernetes deployment (see furth
  curl -v "http://localhost:5050/api/0.1/user/login?login=user_1&password=password"
  
  ```
- ### Setup
+ #### Setup
  
  The Kubernetes configuration files are included in Kubernetes_deployment/. The webapp can be deployed on Google Cloud Platform, for example, by:
  
