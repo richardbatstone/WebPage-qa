@@ -205,7 +205,7 @@ def ask_a_question_API():
                         'context': '{}'.format(answer[0]['answerContext'])}), 201
 
 
-@app.route('/answersAPI', methods=['GET'])
+@app.route('/questionsAPI/answersAPI', methods=['GET'])
 def get_answers_API():
     answer_list = []
     for row in session.execute('SELECT * FROM answers'):
@@ -217,7 +217,7 @@ def get_answers_API():
         answer_list.append(entry) # query answer table and get a list of answers
     return jsonify(answer_list), 200
 
-@app.route('/answersAPI/<ID>', methods=['GET'])
+@app.route('/questionsAPI/answersAPI/<ID>', methods=['GET'])
 def get_answers_by_ID_API(ID):
     answer = {}
     query = "SELECT * FROM answers WHERE id='{}'".format(ID)
@@ -231,7 +231,7 @@ def get_answers_by_ID_API(ID):
     except:
         return jsonify({'error': "Answer ID not found"}), 400
 
-@app.route('/documentsAPI', methods=['GET'])
+@app.route('/questionsAPI/documentsAPI', methods=['GET'])
 def get_documents_API():
     document_list = []
     for row in session.execute('SELECT * FROM documents'):
@@ -242,7 +242,7 @@ def get_documents_API():
         document_list.append(entry) # query answer table and get a list of answers
     return jsonify(document_list), 200
 
-@app.route('/documentsAPI/<ID>', methods=['GET'])
+@app.route('/questionsAPI/documentsAPI/<ID>', methods=['GET'])
 def get_documents_by_ID_API(ID):
     document = {}
     query = "SELECT * FROM documents WHERE capeid='{}'".format(ID)
