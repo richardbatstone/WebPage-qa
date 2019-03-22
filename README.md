@@ -45,7 +45,7 @@ The CapeAPI does not currently form part of the Kubernetes deployment (see furth
  
  # Set up a user (replace password and token with a user password and token)
  
- curl -v "http://localhost:5050/api/0.1/user/create-user?userId=user_1&\password=password&token=token&superAdminToken=REPLACEME"
+ curl -v "http://localhost:5050/api/0.1/user/create-user?userId=user_1&password=password&token=token&superAdminToken=REPLACEME"
  
  # Log the user in and return the admin token
  
